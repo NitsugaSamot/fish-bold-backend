@@ -17,12 +17,6 @@ const emailVerifyAccount = async (datos) => {
   });
 
 
-  
-
-
-
-  // const url = `http://localhost:3000/${encodeURIComponent(`[token]`)}?token=${encodeURIComponent(token)}`;
-
   const url = `${process.env.URL_CONFIRM}${encodeURIComponent[token]}?token=${encodeURIComponent(token)}`;
 
 
