@@ -1,11 +1,8 @@
 const { Router } = require("express");
-
 const { registerUserHandler, verifyAccountHandler,authenticateUserHandler, profile } = require("../handlers/auth.handler");
 const { checkAuth } = require("../middleware/checkAuth");
 
 const authRouter = Router();
-
-
 
 authRouter
   .post('/register', registerUserHandler)

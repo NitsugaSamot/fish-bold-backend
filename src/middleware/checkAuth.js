@@ -14,7 +14,7 @@ const checkAuth = async(req, res, next) => {
 
                 const decoded = jwt.verify(jsontoken, process.env.JWT_SECRET)
 
-                req.user = await UserSchema.findById(decoded.id).select('-password -verificationEmail -challenges -token -createdAt -updatedAt -role -picture -lastname -username -followers -following -notifications -disabled -__v')
+                req.user = await UserSchema.findById(decoded.id).select('-password -verificationEmail -token -createdAt -updatedAt -role -picture -lastname -purshases -following -notifications -disabled -__v')
 
                 // console.log(req.user)
 

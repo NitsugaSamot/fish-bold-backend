@@ -26,16 +26,31 @@ const authenticateUserHandler = async (req, res) => {
 
 const verifyAccountHandler = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { token } = req.query;
+    console.log('Token recibido en el servidor:', token);
     const userVerified = await verifyAccount(token);
 
-    res.json({ msg: 'Su cuenta ha sido verificada Exitosamente!!' });
+    res.json({ msg: 'Su cuenta ha sido verificada Exitosamente, ya puedes iniciar sesión' });
     console.log(userVerified);
   } catch (error) {
     console.log(error);
     res.status(403).json({ msg: error.message });
   }
 };
+
+
+// const verifyAccountHandler = async (req, res) => {
+//   try {
+//     const { token } = req.query;
+//     const userVerified = await verifyAccount(token);
+
+//     res.json({ msg: 'Su cuenta ha sido verificada Exitosamente, ya puedes iniciar sesión' });
+//     console.log(userVerified);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(403).json({ msg: error.message });
+//   }
+// };
 
 const profile = (req,res) => {
     const { user } = req

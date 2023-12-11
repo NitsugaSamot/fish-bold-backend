@@ -11,60 +11,28 @@ const UserSchema = new Schema({
     unique: true,
     required: true,
   },
-  lastname: {
-    type: String,
-    required: true,
-  },
   password: {
     type: String,
     required: true,
-  },
-  username: {
-    type: String,
-    unique: true,
   },
   picture: {
     type: String, //Pensar en usar Buffer
   },
   role: {
     type: String,
-    enum: ["admin", "challenger"],
-    default: "challenger",
+    enum: ["admin", "user"],
+    default: "user",
   },
-  followers: [
-    {
-      user: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-      followDate: {
-        type: Date,
-        default: Date.now(),
-      },
-    },
-  ],
-  following: [
-    {
-      user: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-      followDate: {
-        type: Date,
-        default: Date.now(),
-      },
-    },
-  ],
   notifications: [
     {
       type: Schema.Types.ObjectId,
       ref: "Notification",
     },
   ],
-  challenges: [
+  purchases: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Challenge",
+      ref: "Purchase",
     },
   ],
   disabled: {

@@ -1,14 +1,13 @@
 const { Router } = require("express");
-const userRouter = require("./user.routes");
-const postRouter = require("./post.routes");
 const authRouter = require("./auth.routes")
-
+const productRouter = require("./product.routes")
+const paymentRouter = require("../mercadopago/src/routes/payment")
 
 const mainRouter = Router();
 
 mainRouter
-  .use("/users", userRouter)
-  .use("/posts", postRouter)
   .use("/auth", authRouter)
+  .use("/products", productRouter)
+  .use("/mercadopago", paymentRouter)
 
 module.exports = mainRouter;

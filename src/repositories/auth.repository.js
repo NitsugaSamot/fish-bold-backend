@@ -3,24 +3,57 @@ const  User = require('../models/user.model');
 const { generateToken, generateJWT } = require('../helpers/tokens');
 const {emailVerifyAccount} = require('../helpers/sendEmail')
 
-const registerUserController = async (userData) => {
-  const { email, username } = userData;
-  const existingUser = await User.findOne({ email });
-  const existingUserName = await User.findOne({ username });
+const registerUserController = async ( {email,  name, password}) => {
 
-  if (existingUser) throw new Error("Ya hay un registro con este email");
+    // email = email.trim();
+    // name = name.trim();
 
-  if (existingUserName) throw new Error("El Username que elegiste para tu cuenta no se encuentra disponible");
+    // Validaciones
+    const nameContainsNumber = /\d/.test(name);
+    // const lastnameContainsNumber = /\d/.test(lastname);   
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const usernameRegex = /^[a-zA-Z0-9]{1,13}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?!\s).+$/;
+    const existingUser = await User.findOne({ email });
+    // const existingUserName = await User.findOne({ username });
+
+    if (!email || !name || !password) {
+      throw new Error("Todos los campos son obligatorios");
+    } 
+
+    if (existingUser) throw new Error("Ya hay un registro con este email");
+
+    // if (existingUserName) throw new Error("El Username que elegiste para tu cuenta no se encuentra disponible");
+
+    if (nameContainsNumber) {
+      throw new Error("El nombre no debe contener números");
+    } 
+
+    if (!emailRegex.test(email)) throw new Error("Formato de email no válido");
+
+    if (name.length < 2) {
+      throw new Error("El nombre y el apellido deben tener al menos 2 caracteres");
+    }
+
+    // if (!usernameRegex.test(username) || username.replace(/[0-9]/g, "").length > 8) {
+    //   throw new Error("El username debe tener entre 1 y 13 caracteres, máximo 5 números");
+    // }
+
+    if (!passwordRegex.test(password))  {
+      throw new Error("La contraseña debe contener al menos una mayúscula, un número y no debe contener espacios en blanco");
+    }
+    
+    const user = new User({email, name, password});
+    user.token = generateToken();
+    await user.save();
   
-  const user = new User(userData);
-  user.token = generateToken();
-  await user.save();
-
-  //enviar el mail de confirmación 
-  emailVerifyAccount({ email: user.email, name: user.name,token: user.token })
-
-  return user;
-};
+    // Enviar el correo de confirmación
+    emailVerifyAccount({ email: user.email, name: user.name, token: user.token });
+  
+    return user;
+  };
+  
+  
 
 const verifyAccount = async (token) => {
   const userVerified = await User.findOne({ token });
@@ -35,6 +68,10 @@ const verifyAccount = async (token) => {
 };
 
 const authenticateUser = async (email, password) => {
+
+  email = email.trim();
+  password = password.trim();
+
   const user = await User.findOne({ email });
 
   if (!user) throw new Error('Usuario inexistente');
