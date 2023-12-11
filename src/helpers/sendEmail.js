@@ -17,7 +17,7 @@ const emailVerifyAccount = async (datos) => {
   });
 
 
-  const url = `${process.env.URL_CONFIRM}${encodeURIComponent[token]}?token=${encodeURIComponent(token)}`;
+  const url = `https://fish-bold-frontend-nitsugasamot.vercel.app/[token]?token=${encodeURIComponent(token)}`;
 
 
   const info = await transport.sendMail({
